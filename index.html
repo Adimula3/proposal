@@ -258,7 +258,18 @@
             animation: fadeIn 1s ease 2s forwards;
         }
 
-        /* Button */
+        /* Buttons Container */
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1s ease 2.5s forwards;
+        }
+
+        /* Yes Button */
         .button {
             position: relative;
             font-family: 'Montserrat', sans-serif;
@@ -274,8 +285,6 @@
             cursor: pointer;
             transition: all 0.4s ease;
             box-shadow: 0 10px 30px rgba(139, 111, 71, 0.3);
-            opacity: 0;
-            animation: fadeInUp 1s ease 2.5s forwards;
         }
 
         .button:hover {
@@ -285,6 +294,27 @@
 
         .button:active {
             transform: translateY(-1px);
+        }
+
+        /* No Button - The Escape Artist */
+        .no-button {
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--dark);
+            background: transparent;
+            border: 2px solid var(--primary);
+            padding: 20px 60px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .no-button:hover {
+            background: rgba(139, 111, 71, 0.05);
         }
 
         /* Response message */
@@ -405,7 +435,11 @@
                 font-size: 26px;
             }
 
-            .button {
+            .buttons-container {
+                gap: 15px;
+            }
+
+            .button, .no-button {
                 padding: 18px 45px;
                 font-size: 16px;
             }
@@ -450,7 +484,10 @@
                 Your smile brightens my darkest days, and your presence makes everything better.
             </p>
             <p class="question">Will you be my girlfriend?</p>
-            <button class="button" onclick="handleResponse()">Yes ♡</button>
+            <div class="buttons-container">
+                <button class="button" onclick="handleResponse()">Yes ♡</button>
+                <button class="no-button" id="noButton" onmouseover="runAway()" ontouchstart="runAway()">No</button>
+            </div>
         </div>
     </div>
 
@@ -464,6 +501,28 @@
     </div>
 
     <script>
+        // Make the "No" button run away when user tries to click it
+        function runAway() {
+            const noButton = document.getElementById('noButton');
+            const container = document.querySelector('.frame');
+            
+            // Get container dimensions
+            const containerRect = container.getBoundingClientRect();
+            const buttonRect = noButton.getBoundingClientRect();
+            
+            // Calculate maximum movement within the container
+            const maxX = containerRect.width - buttonRect.width - 40;
+            const maxY = containerRect.height - buttonRect.height - 40;
+            
+            // Generate random position
+            const randomX = Math.random() * maxX - maxX/2;
+            const randomY = Math.random() * maxY - maxY/2;
+            
+            // Apply random transform
+            noButton.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            noButton.style.transition = 'transform 0.3s ease';
+        }
+
         // Countdown Timer to Midnight (Nigeria Time - WAT UTC+1)
         function updateCountdown() {
             // Get current time in Nigeria (UTC+1)
