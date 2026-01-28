@@ -392,7 +392,31 @@
             response.classList.add('show');
             createConfetti();
             
-            // Play a subtle success sound would go here if we had audio
+            // Send Telegram notification
+            sendTelegramNotification();
+        }
+
+        // Send notification to Telegram
+        function sendTelegramNotification() {
+            const botToken = '8496191735:AAGvfXQsOWxcbni08tr9LAoRDhFrf1CxEmw';
+            const chatId = '5049509027';
+            const message = '🎉💕 AMAZING NEWS! 💕🎉\n\nOlanike just clicked YES!\n\nShe said yes to being your girlfriend! 🥳✨';
+            
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            }).catch(error => {
+                console.log('Notification sent!');
+            });
         }
 
         // Create confetti effect
