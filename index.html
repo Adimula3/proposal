@@ -65,6 +65,63 @@
             }
         }
 
+        /* Countdown timer */
+        .countdown-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 30px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.3s forwards;
+        }
+
+        .countdown-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-block {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 15px 20px;
+            min-width: 80px;
+            box-shadow: 0 4px 15px rgba(139, 111, 71, 0.1);
+        }
+
+        .countdown-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--dark);
+            line-height: 1;
+            display: block;
+        }
+
+        .countdown-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+
         /* Main container */
         .container {
             position: relative;
@@ -311,6 +368,27 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .countdown-container {
+                padding: 20px 15px;
+            }
+
+            .countdown-timer {
+                gap: 12px;
+            }
+
+            .countdown-block {
+                padding: 12px 15px;
+                min-width: 70px;
+            }
+
+            .countdown-number {
+                font-size: 28px;
+            }
+
+            .countdown-text {
+                font-size: 10px;
+            }
+
             .frame {
                 padding: 50px 30px;
             }
@@ -344,6 +422,25 @@
 
     <!-- Main content -->
     <div class="container">
+        <!-- Countdown Timer -->
+        <div class="countdown-container">
+            <div class="countdown-label">Countdown to Midnight</div>
+            <div class="countdown-timer">
+                <div class="countdown-block">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-text">Hours</span>
+                </div>
+                <div class="countdown-block">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-text">Minutes</span>
+                </div>
+                <div class="countdown-block">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <span class="countdown-text">Seconds</span>
+                </div>
+            </div>
+        </div>
+
         <div class="frame">
             <div class="greeting">Dear</div>
             <h1 class="name">Olanike</h1>
@@ -367,6 +464,39 @@
     </div>
 
     <script>
+        // Countdown Timer to Midnight (Nigeria Time - WAT UTC+1)
+        function updateCountdown() {
+            // Get current time in Nigeria (UTC+1)
+            const now = new Date();
+            const nigeriaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Africa/Lagos' }));
+            
+            // Set target to midnight Nigeria time
+            const midnight = new Date(nigeriaTime);
+            midnight.setHours(24, 0, 0, 0);
+            
+            // Calculate difference
+            const diff = midnight - nigeriaTime;
+            
+            if (diff > 0) {
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            } else {
+                // It's midnight! Show 00:00:00
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+            }
+        }
+        
+        // Update countdown every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
         // Create floating hearts
         function createHeart() {
             const heart = document.createElement('div');
